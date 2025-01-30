@@ -28,7 +28,7 @@ To get started with this project, follow these steps:
 
 1. **Clone the repository**:
     ```bash
-    git clone https://github.com/MANDEEP-shrma/backend-practice
+    git clone https://github.com/MANDEEP-shrma/backend-practice.git
     ```
 
 2. **Install dependencies**:
