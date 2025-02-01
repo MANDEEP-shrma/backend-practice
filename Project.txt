@@ -1,3 +1,105 @@
 This file will contain every detail of the project we are making. It will include new functionality, errors encountered, and industry practices followed. This document serves as a comprehensive guide and reference for the project's development process.
 
+-Please Seriously Read this out before making a project atleast till models because there is so much new things in here.
 
+1.Models are design using feature Scopes.[Currently we follow the classes but Models are great if they are achieving same functionality]
+
+2.Storing Images :- Third Parties applications.
+    a.First we put them in our local server.then on cloud.
+    b.Creating folder Public > temp :- here we put all this static files.
+
+3.(.gitignore and .env) :- There are some generators online , this websites help you generates the this .gitignore file for node project.
+
+4.(.env.sample) :- create as reference file for git users.
+
+5.Create Src folder. :- Whole Source code will go here. and also create three files ,
+    a.index.js :- Entry point of execution.
+    b.app.js :- have the code of express importing and all.
+    c.constants.js :- In this we will put some variables which we have to use at multiple places but also not secret so we can put in .env
+
+6.Changing Package.Json to change the type from commonJs to moduleJs
+
+7.Installing nodemon :- Npm install -D nodemon 
+    -> this will install the nodemon as the dev dependency and make the file light [this type of dependencies are not good as main]
+
+8.Writing Script for Running the file :- "dev":"nodemon src/index.js"
+
+9. ---Checkpoint pushed the code to github----
+
+1.Creating Some folders.
+    a.Controllers :- Majorly functionality
+    b.db :- Includes Database connection
+    c.middlewares
+    d.Models :- Include our models and schemas
+    e.Routes :- Routes handling for standards
+    f.Utils / Utilities :- FileUpload, mailing , tokenisation or some handling functions(which repeats a lot.)
+
+
+2.Install Prettier through npm. :- Because there are multiple developers who are gonna write the code in same branch and push there respectives codes and when they push it , the code leads to merge conflicts because everyone have differnt way of writing code so making Prettier a dependency will format all the different code like one and done.
+
+3.To implement this we also have to create two files :-
+    a..prettierrc:- In this file you can put you custom customisation that how you want to format the code.
+    b. .prettierignore :- In this file you have to mention the files folder where you don't want any changes by prettier.
+
+4.Export a db_name from the constants file.
+
+5.Use Try_catch or promise while talking to database because ,
+    a.Database is always exist in other continent.(async await)
+    b.Because they can fail.
+
+6.there are two approaches to connect the DB.
+    a.By using IIFE function inside which you are gonna use Try_catch and also listen if everything goes right.
+    b.Db connection from DB folder. Here we do the exactly the same work that we did in the index.js but we don't need to use IIFE here because this file contains only this database connection code nothing else and in this file Iam using process.exit(1) to throw the error this process(comes from node environment.)
+
+7. -----------We pushed the code again------------
+
+1. -----Class 8-------
+
+2.Remember this , that async function always return a Promise (because yaa it exits in two states <Pending> <fulfilled>) so we can use .then and .catch
+
+3.Cookie-parser and Cors download.
+
+4.We import them into app.js
+
+5.When configuring cors it give us two options. 
+    a.origin: your frontend URL
+    b.credentials :true
+
+6.We can also add a configuration for the json data that comes from the frontend that how much of data we can take like we can configure multiple option in express.json({}) but we do the limit for now.
+
+7.We configure one more middleware which is urlEncoded , we need this to understand the data coming from the url.
+
+8.Express.static :- We do this configuration to handle the data like we want to store images, pdf in our local server so for that we use this in case we want to access them.
+
+9.We pass the cookieParser in the middleware by calling it without any option because we don't need any option.
+
+10.We create a handler funtion in utils folder whose work is to simply wrap the given function to it with the middlware environment. and we handle the error there so this save us from writing the redundant code.(I am sticking two images here you can check them and you got the reference that how we write the wrapper.)
+
+11.Standardsing Errors :- WE will create our custom standard error class which extends teh Base Error class of node.
+    Now this class have some variables that are defined by us and handled in a order so when ever we need to show the error we use this class and pass the required parameters which can save from sending irregular data like in some /endpoint iam sending 
+    statuscode and message and in some i forgot one so this will not happen there.
+
+12.Same we create a custom class for responses also hence node doesn't give us any class for response hence we have to create new.
+
+13.Why we are using this.data in error because there is no point of doing it . . But there is and the point is that when we send data as null in the frontend developer can handle it more perfectly.
+
+14. ------------------Class 9------------
+
+1.Models :- a.user b.videos
+    -> for now we will create this two models only.
+    ->index:true, :- For now learn that when we use this for a field the search with that field became super optimised.
+
+2.Aggregation Pipline :- Mongo have a very beautiful application of this which envils the true power of mongo now you can see how to init them (we learn explanation afterwards)
+    ->To start first we have to download a package "npm i mongoose-aggregate-paginate-v2"
+    Now we import it .
+    -> And use it as a plugin in Videos Schema.
+        videoSchema.plugin(importedVariable)
+    ->put this line just before the exports.
+
+3.For user Model now download :- 1)bcrypt 2)JWT
+
+4.pre() hooks and like that :- this are like the middlware which do some job before / after happening of something.
+    -> Like for pre(event,callback) before the event this hook take place.
+    ->We put them into the Schema file only.    
+    ->First arg is event ["save","delete"] etc.
+    
