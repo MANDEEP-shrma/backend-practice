@@ -6,7 +6,7 @@ import {ApiResponse} from '../utils/ApiResponse.js'
 
 const registerUser = asyncHandlerMain( async (req,res)=>{
    //get user details which are needed
-   //validation - not empty
+   //validation - not empty 
    //check if user already exists: username, email
    //check for images and for avatar
    //upload them to cloudinary , does avatar uploaded
@@ -15,12 +15,12 @@ const registerUser = asyncHandlerMain( async (req,res)=>{
    //we remove password and tokens field from response
    //return the response
 
-   const {fullName,email,username,password} = req.body
-   console.log("fullName: ",fullName)
+   const {fullname,email,username,password} = req.body
+   console.log("fullName: ",fullname)
 
    //checking not empty validation
    if(
-      [fullName,email,username,password].some((eachField)=>{
+      [fullname,email,username,password].some((eachField)=>{
          return eachField?.trim() === ""
       })
    ){
@@ -28,7 +28,7 @@ const registerUser = asyncHandlerMain( async (req,res)=>{
    }
 
    //finding duplicate in the db
-   const userExists = User.findOne({
+   const userExists = await User.findOne({
       $or:[{ username },{ email }]
    })
    
@@ -36,8 +36,14 @@ const registerUser = asyncHandlerMain( async (req,res)=>{
       throw new ApiError(409,"The username or email already exists")
    }
 
-   const avatarLocalPath = req.files?.Avatar[0]?.path
-   const coverImgLocalPath = req.files?.CoverImage[0]?.path
+   const avatarLocalPath = req.files?.avatar[0]?.path
+   // const coverImgLocalPath = req.files?.coverImage[0]?.path
+   let coverImgLocalPath;
+   if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+      coverImgLocalPath = req.files.coverImage[0].path
+   }else{
+      coverImgLocalPath = null;
+   }
 
    //checking the avatar
    if(!avatarLocalPath){
@@ -46,7 +52,12 @@ const registerUser = asyncHandlerMain( async (req,res)=>{
 
    //Saving it on Cloudinary
    const avatar = await uploadOnCloudinary(avatarLocalPath)
-   const coverImg = await uploadOnCloudinary(coverImgLocalPath)
+   let coverImg;
+   if(coverImgLocalPath){
+       coverImg = await uploadOnCloudinary(coverImgLocalPath)
+   }else{
+      coverImg = null
+   }
 
    //again check the Avatar that it exit or not
    if(!avatar){
@@ -55,7 +66,7 @@ const registerUser = asyncHandlerMain( async (req,res)=>{
 
    //Entry in database
    const user = await User.create({
-      fullName,
+      fullname,
       email,
       avatar:avatar.url,
       coverImage: coverImg? coverImg.url : "",

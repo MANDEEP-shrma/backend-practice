@@ -18,7 +18,8 @@ const uploadOnCloudinary = async (localFilePath)=>{
         })
         //file has been updated successfully
         //this url is the public url where the file is uploaded 
-        console.log("file is uploaded on cloudinary",response.url)
+        // console.log("file is uploaded on cloudinary",response.url)
+        fs.unlinkSync(localFilePath)
         return response
     } catch (error) {
         fs.unlinkSync(localFilePath)
