@@ -228,9 +228,9 @@ const refreshAccessToken = asyncHandlerMain(async(req,res)=>{
    
    //why doing this 1.access token toh banega usi kai liye toh yha aaya hai.
    //2.refresh token :- ek baar woh refresh token nai access token bnaya liya toh abb usko 
-   //change kardenge wrna kisi kai haath lag gya toh kat jaayega.
+   //change kardenge wrna kisi kai haath lag gya toh kat
    const {accessToken,newRefreshToken} = await generateAccessAndRefreshTokens(user._id);
- 
+   
    return res
    .status(200)
    .cookie("accessToken",accessToken,options)
